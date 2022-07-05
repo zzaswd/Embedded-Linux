@@ -1,0 +1,1 @@
+cmd_/home/ubuntu/udoo_linux_bsp/drivers/p106_x86/modules.order := {   echo /home/ubuntu/udoo_linux_bsp/drivers/p106_x86/hello.ko; :; } | awk '!x[$$0]++' - > /home/ubuntu/udoo_linux_bsp/drivers/p106_x86/modules.order
