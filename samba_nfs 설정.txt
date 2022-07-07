@@ -1,0 +1,51 @@
+-.ssh server 설치
+~$sudo apt install openssh-server
+윈도우즈에서 putty 설치 
+
+-.삼바 서버 설정
+~$ sudo apt install samba -y	//패키지 설치
+~$ sudo mkdir /srv/samba		//공유 디렉토리 새엇ㅇ
+~$ sudo chmod 777 /srv/samba	//디렉토리 접근권한 모두허용
+~$ sudo gedit /etc/samba/smb.conf	//삼바 환경 설정
+ 맨 끝에 아래 라인 추가 
+===============================
+[samba]
+   comment = shared folder
+   path = /srv/samba
+   browseable = yes
+   writable = yes
+   valid users = ubuntu
+   public = yes
+================================
+~$ sudo smbpasswd -a ubuntu	//접속 계정과 암호 설정 
+~$ sudo service smbd restart 	//삼바데몬 재시작
+
+윈도우즈 탐색기 실행창에서
+\\192.168.10.x     						//x:리눅스 서버 IP
+
+=================================
+NFS 서버 설치
+~$sudo apt-get install nfs-common nfs-kernel-server rpcbind
+~$sudo mkdir /srv/nfs
+~$sudo chmod 777 /srv/nfs
+~$sudo vi /etc/exports
+-----------------------
+/srv/nfs    192.168.10.0/24(rw,sync)
+-----------------------
+~$sudo service nfs-kernel-server restart
+~$sudo exportfs
+/srv/nfs        192.168.10.0/24(rw,sync)
+
+NFS 마운트 (파일 읽고 쓰기)
+~$sudo mkdir /mnt/lect_nfs
+~$sudo mount -t nfs 192.168.10.40:/srv/nfs /mnt/lect_nfs
+//~$sudo mount -t nfs 10.10.15.150:/srv/nfs /mnt/lect_nfs
+~$df
+-------------
+192.168.10.50:/srv/nfs  78310400 5295104  69014016   8% /mnt/lect_nfs
+-------------
+~$sudo cd /mnt/lect_nfs  ==> 192.168.10.50서버의 /srv/nfs에 접속됨
+
+NFS 마운트 해제
+~$sudo umount /mnt/lect_nfs
+
